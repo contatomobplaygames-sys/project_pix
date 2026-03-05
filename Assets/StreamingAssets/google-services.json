@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "695507676775",
+    "project_id": "pixbrasil-52091",
+    "storage_bucket": "pixbrasil-52091.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:695507676775:android:6139d5bcbc377d5659aec2",
+        "android_client_info": {
+          "package_name": "com.mobplay.pixbrasil"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChHL7t1EEGMCpZGHVvlT7oFoyfQavAjOk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

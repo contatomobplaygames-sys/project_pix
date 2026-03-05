@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd9ca13c60f95a149bab539ee8cd7dd7, type: 3}
+  m_Name: MaxAds
+  m_EditorClassIdentifier: Assembly-CSharp::Ads.MaxAds
+  sdkKey: 305HTZSFID4gKwOH25p3GxdpW_ebL5_hqerdTSs06EhR00P0eMc1KkghSu4wvEUr04vO2xPa4q9RBA95-xcgUi
+  interstitialPlacementId: cb8e7a484f25e7d5
+  bannerPlacementId: 27cc65b37187edb3
+  rewardedPlacementId: f9850e740e430c56
+  isManualBannerRect: 0
+  bannerRect:
+    width: 0
+    height: 0
+    x: 0
+    y: 0

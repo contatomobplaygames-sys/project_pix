@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sem Conexão - App Móvel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Animação de fundo */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 107, 107, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(74, 144, 226, 0.3) 0%, transparent 50%);
+            animation: gradient 15s ease infinite;
+        }
+
+        @keyframes gradient {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(180deg); }
+        }
+
+        .offline-container {
+            text-align: center;
+            max-width: 450px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 50px 40px;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: slideInUp 0.8s ease-out;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .offline-icon {
+            font-size: 80px;
+            margin-bottom: 25px;
+            animation: pulse 2s infinite;
+            display: block;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
+        }
+
+        .offline-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #fff, #f0f0f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .offline-message {
+            font-size: 1.1rem;
+            margin-bottom: 35px;
+            line-height: 1.6;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: rgba(255, 107, 107, 0.2);
+            border-radius: 15px;
+            border-left: 4px solid #ff6b6b;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            background: #ff6b6b;
+            border-radius: 50%;
+            margin-right: 10px;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+
+        .status-text {
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .retry-button {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(255, 107, 107, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .retry-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(255, 107, 107, 0.4);
+        }
+
+        .retry-button:active {
+            transform: translateY(0);
+        }
+
+        .retry-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .retry-button:hover::before {
+            left: 100%;
+        }
+
+        .settings-button {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .settings-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .tips-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tips-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tips-title::before {
+            content: '💡';
+            margin-right: 8px;
+        }
+
+        .tips-list {
+            text-align: left;
+            list-style: none;
+            padding: 0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .tips-list li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+            opacity: 0.8;
+        }
+
+        .tips-list li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #64b5f6;
+            font-weight: bold;
+        }
+
+        .app-info {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .offline-container {
+                padding: 40px 30px;
+                margin: 20px;
+            }
+
+            .offline-title {
+                font-size: 1.8rem;
+            }
+
+            .offline-message {
+                font-size: 1rem;
+            }
+
+            .offline-icon {
+                font-size: 60px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .offline-container {
+                padding: 30px 25px;
+            }
+
+            .offline-title {
+                font-size: 1.6rem;
+            }
+
+            .retry-button, .settings-button {
+                padding: 14px 24px;
+                font-size: 0.95rem;
+            }
+        }
+
+        /* Animações adicionais */
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Loading state */
+        .loading .retry-button {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .loading .retry-button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid transparent;
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-container">
+        <div class="offline-icon floating">📡</div>
+        
+        <h1 class="offline-title">Sem Conexão</h1>
+        
+        <p class="offline-message">
+            Você está offline. Para continuar usando o aplicativo, verifique sua conexão com a internet.
+        </p>
+
+        <div class="status-indicator">
+            <div class="status-dot"></div>
+            <div class="status-text">Conexão não disponível</div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="retry-button" onclick="checkConnection()">
+                🔄 Verificar Conexão
+            </button>
+            
+            <button class="settings-button" onclick="openSettings()">
+                ⚙️ Configurações de Rede
+            </button>
+        </div>
+
+        <div class="tips-section">
+            <div class="tips-title">Dicas para resolver:</div>
+            <ul class="tips-list">
+                <li>Verifique se o Wi-Fi ou dados móveis estão ativos</li>
+                <li>Tente desligar e ligar novamente o Wi-Fi</li>
+                <li>Reinicie o roteador se estiver usando Wi-Fi</li>
+                <li>Verifique se há limitações de dados no seu plano</li>
+                <li>Tente se aproximar do roteador Wi-Fi</li>
+            </ul>
+        </div>
+
+        <div class="app-info">
+            <div>📱 App Móvel - Modo Offline</div>
+            <div>A conexão será verificada automaticamente</div>
+        </div>
+    </div>
+
+    <script>
+        let checkingConnection = false;
+        let autoCheckInterval;
+
+        // Função para verificar conexão
+        function checkConnection() {
+            if (checkingConnection) return;
+            
+            checkingConnection = true;
+            document.body.classList.add('loading');
+            
+            const button = document.querySelector('.retry-button');
+            const originalText = button.innerHTML;
+            button.innerHTML = 'Verificando...';
+            
+            // Simular verificação (na prática, o Unity gerenciará isso)
+            setTimeout(() => {
+                // Esta função será interceptada pelo Unity
+                if (typeof unity !== 'undefined' && unity.call) {
+                    unity.call('CheckConnectionFromWeb');
+                } else if (navigator.onLine) {
+                    // Fallback para detecção básica de conexão
+                    window.location.reload();
+                } else {
+                    showConnectionFailed();
+                }
+                
+                button.innerHTML = originalText;
+                document.body.classList.remove('loading');
+                checkingConnection = false;
+            }, 2000);
+        }
+
+        function showConnectionFailed() {
+            const statusText = document.querySelector('.status-text');
+            const originalText = statusText.textContent;
+            
+            statusText.textContent = 'Ainda sem conexão';
+            statusText.style.color = '#ff6b6b';
+            
+            setTimeout(() => {
+                statusText.textContent = originalText;
+                statusText.style.color = '';
+            }, 3000);
+        }
+
+        function openSettings() {
+            // Esta função será interceptada pelo Unity para abrir configurações
+            if (typeof unity !== 'undefined' && unity.call) {
+                unity.call('OpenNetworkSettings');
+            } else {
+                alert('Para alterar as configurações de rede, acesse as configurações do seu dispositivo.');
+            }
+        }
+
+        // Monitor de conexão
+        function startConnectionMonitoring() {
+            autoCheckInterval = setInterval(() => {
+                if (navigator.onLine) {
+                    clearInterval(autoCheckInterval);
+                    if (typeof unity !== 'undefined' && unity.call) {
+                        unity.call('ConnectionRestored');
+                    } else {
+                        window.location.reload();
+                    }
+                }
+            }, 5000);
+        }
+
+        // Event listeners
+        window.addEventListener('online', function() {
+            console.log('Conexão restaurada');
+            clearInterval(autoCheckInterval);
+            
+            // Notificar Unity sobre a reconexão
+            if (typeof unity !== 'undefined' && unity.call) {
+                unity.call('ConnectionRestored');
+            } else {
+                // Fallback: recarregar página
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+            }
+        });
+
+        window.addEventListener('offline', function() {
+            console.log('Conexão perdida');
+            startConnectionMonitoring();
+        });
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Página offline carregada');
+            startConnectionMonitoring();
+            
+            // Verificação inicial após 3 segundos
+            setTimeout(() => {
+                if (navigator.onLine) {
+                    checkConnection();
+                }
+            }, 3000);
+        });
+
+        // Adicionar efeitos visuais
+        document.querySelectorAll('.retry-button, .settings-button').forEach(button => {
+            button.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px)';
+            });
+            
+            button.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Prevenção de context menu para melhor experiência mobile
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        // Feedback tátil para dispositivos móveis
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('touchstart', function() {
+                this.style.transform = 'scale(0.95)';
+            });
+            
+            button.addEventListener('touchend', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+
+        // Função para ser chamada pelo Unity
+        window.unityConnectionCallback = function(isConnected) {
+            if (isConnected) {
+                document.querySelector('.status-text').textContent = 'Conexão restaurada!';
+                document.querySelector('.status-dot').style.background = '#4caf50';
+                
+                setTimeout(() => {
+                    if (typeof unity !== 'undefined' && unity.call) {
+                        unity.call('LoadMainPage');
+                    }
+                }, 1500);
+            } else {
+                showConnectionFailed();
+            }
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Teste de Envio de Pontos - PixReward</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+
+        .section h2 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .info-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .info-item label {
+            display: block;
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .info-item value {
+            display: block;
+            font-size: 18px;
+            color: #333;
+            font-weight: 700;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            box-shadow: 0 4px 15px rgba(250, 112, 154, 0.4);
+        }
+
+        .btn-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .logs {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .log-entry {
+            margin-bottom: 8px;
+            padding: 8px;
+            border-radius: 4px;
+            border-left: 3px solid transparent;
+        }
+
+        .log-entry.success {
+            background: rgba(76, 175, 80, 0.1);
+            border-left-color: #4caf50;
+        }
+
+        .log-entry.error {
+            background: rgba(244, 67, 54, 0.1);
+            border-left-color: #f44336;
+        }
+
+        .log-entry.warning {
+            background: rgba(255, 152, 0, 0.1);
+            border-left-color: #ff9800;
+        }
+
+        .log-entry.info {
+            background: rgba(33, 150, 243, 0.1);
+            border-left-color: #2196f3;
+        }
+
+        .log-time {
+            color: #888;
+            font-size: 11px;
+            margin-right: 8px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .status-online {
+            background: #4caf50;
+            color: white;
+        }
+
+        .status-offline {
+            background: #f44336;
+            color: white;
+        }
+
+        .status-unknown {
+            background: #ff9800;
+            color: white;
+        }
+
+        .clear-logs {
+            margin-top: 10px;
+            padding: 8px 16px;
+            background: #666;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧪 Teste de Envio de Pontos</h1>
+            <p>Sistema PixReward - Diagnóstico e Testes</p>
+            <div style="margin-top: 15px;">
+                <span id="unityStatus" class="status-badge status-unknown">Verificando Unity...</span>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- Informações do Sistema -->
+            <div class="section">
+                <h2>📊 Informações do Sistema</h2>
+                <div class="info-grid" id="systemInfo">
+                    <div class="info-item">
+                        <label>Guest ID</label>
+                        <value id="guestId">-</value>
+                    </div>
+                    <div class="info-item">
+                        <label>User ID</label>
+                        <value id="userId">-</value>
+                    </div>
+                    <div class="info-item">
+                        <label>Device ID</label>
+                        <value id="deviceId" style="font-size: 12px; word-break: break-all;">-</value>
+                    </div>
+                    <div class="info-item">
+                        <label>Pontos Locais</label>
+                        <value id="localPoints">-</value>
+                    </div>
+                </div>
+                <button class="btn btn-secondary" onclick="refreshSystemInfo()">🔄 Atualizar Informações</button>
+            </div>
+
+            <!-- Testes de Envio -->
+            <div class="section">
+                <h2>🚀 Testes de Envio</h2>
+                
+                <div class="input-group">
+                    <label>Quantidade de Pontos</label>
+                    <input type="number" id="pointsAmount" value="2" min="1" max="100">
+                </div>
+
+                <div class="input-group">
+                    <label>Rede de Anúncios</label>
+                    <select id="adNetwork">
+                        <option value="max">MAX (AppLovin)</option>
+                        <option value="admob">AdMob</option>
+                        <option value="test">Teste Manual</option>
+                    </select>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-success" onclick="testSendPoints()">✅ Enviar Pontos</button>
+                    <button class="btn btn-secondary" onclick="testRewardedAd()">🎬 Simular Rewarded Ad</button>
+                    <button class="btn btn-danger" onclick="testMultipleSends()">🔄 Teste Múltiplos Envios</button>
+                </div>
+            </div>
+
+            <!-- Teste de Envio Via Web -->
+            <div class="section">
+                <h2>🌐 Envio Direto Via Web (HTTP)</h2>
+                <p style="margin-bottom: 15px; color: #666; font-size: 14px;">
+                    Envia pontos diretamente ao servidor via HTTP, sem depender do Unity.
+                </p>
+                
+                <div class="input-group">
+                    <label>Guest ID (opcional se tiver User ID)</label>
+                    <input type="number" id="webGuestId" placeholder="Deixe vazio para usar do sistema">
+                </div>
+
+                <div class="input-group">
+                    <label>User ID (opcional se tiver Guest ID)</label>
+                    <input type="number" id="webUserId" placeholder="Deixe vazio para usar do sistema">
+                </div>
+
+                <div class="input-group">
+                    <label>Device ID (opcional, usado como fallback)</label>
+                    <input type="text" id="webDeviceId" placeholder="Deixe vazio para usar do sistema">
+                </div>
+
+                <div class="input-group">
+                    <label>Quantidade de Pontos</label>
+                    <input type="number" id="webPointsAmount" value="2" min="1" max="100">
+                </div>
+
+                <div class="input-group">
+                    <label>Tipo de Pontos</label>
+                    <select id="webPointsType">
+                        <option value="rewarded_video">Rewarded Video</option>
+                        <option value="daily_mission">Daily Mission</option>
+                        <option value="bonus">Bonus</option>
+                        <option value="test">Teste</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Rede de Anúncios</label>
+                    <select id="webAdNetwork">
+                        <option value="max">MAX (AppLovin)</option>
+                        <option value="admob">AdMob</option>
+                        <option value="web_test">Teste Web</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>URL do Servidor</label>
+                    <input type="text" id="serverUrl" value="https://serveapp.mobplaygames.com.br/app_pix01/php/unified_submit_score.php" placeholder="URL do endpoint">
+                    <div style="margin-top: 5px; font-size: 12px; color: #666;">
+                        <strong>URLs alternativas para testar:</strong>
+                        <select id="urlPresets" onchange="selectUrlPreset()" style="width: 100%; margin-top: 5px; padding: 5px; font-size: 12px;">
+                            <option value="">-- Selecione uma URL alternativa --</option>
+                            <option value="https://serveapp.mobplaygames.com.br/app_pix01/php/unified_submit_score.php">Padrão: app_pix01/php/</option>
+                            <option value="https://serveapp.mobplaygames.com.br/php/unified_submit_score.php">Alternativa 1: php/</option>
+                            <option value="https://serveapp.mobplaygames.com.br/server/php/unified_submit_score.php">Alternativa 2: server/php/</option>
+                            <option value="https://serveapp.mobplaygames.com.br/app_pix01/server/php/unified_submit_score.php">Alternativa 3: app_pix01/server/php/</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button class="btn btn-success" onclick="sendPointsViaWeb()">🌐 Enviar Via Web</button>
+                <button class="btn btn-secondary" onclick="autoFillWebForm()" style="margin-top: 10px;">📋 Preencher Automaticamente</button>
+            </div>
+
+            <!-- Estatísticas -->
+            <div class="section">
+                <h2>📈 Estatísticas</h2>
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalSent">0</div>
+                        <div class="stat-label">Total Enviado</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="successCount">0</div>
+                        <div class="stat-label">Sucessos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="errorCount">0</div>
+                        <div class="stat-label">Erros</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="lastTotal">-</div>
+                        <div class="stat-label">Último Total</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Logs -->
+            <div class="section">
+                <h2>📝 Logs</h2>
+                <div class="logs" id="logsContainer"></div>
+                <button class="clear-logs" onclick="clearLogs()">🗑️ Limpar Logs</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Estado
+        let stats = {
+            totalSent: 0,
+            successCount: 0,
+            errorCount: 0,
+            lastTotal: null
+        };
+
+        // Detectar ambiente Unity
+        function isUnityEnvironment() {
+            const ua = (navigator.userAgent || '').toLowerCase();
+            const isWebView = ua.includes('wv') || ua.includes('uniwebview');
+            const isNotRegularBrowser = !ua.includes('chrome') || ua.includes('wv');
+            const isAndroidUnity = isWebView && isNotRegularBrowser;
+            const isIOSUnity = !!window.webkit?.messageHandlers;
+            return isAndroidUnity || isIOSUnity;
+        }
+
+        // Enviar mensagem para Unity
+        function sendToUnity(path, params = {}) {
+            if (!isUnityEnvironment()) {
+                addLog('⚠️ Unity não disponível - simulando envio', 'warning');
+                addLog(`📋 URL que seria enviada: uniwebview://${path}?${new URLSearchParams(params).toString()}`, 'info');
+                return false;
+            }
+
+            try {
+                const paramsStr = Object.keys(params)
+                    .map(key => `${key}=${encodeURIComponent(params[key])}`)
+                    .join('&');
+                
+                const url = `uniwebview://${path}${paramsStr ? '?' + paramsStr : ''}`;
+                addLog(`📤 Enviando para Unity: ${url}`, 'info');
+                
+                window.location.href = url;
+                return true;
+            } catch (error) {
+                addLog(`❌ Erro ao enviar para Unity: ${error.message}`, 'error');
+                return false;
+            }
+        }
+
+        // Adicionar log
+        function addLog(message, type = 'info') {
+            const logsContainer = document.getElementById('logsContainer');
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry ${type}`;
+            
+            const time = new Date().toLocaleTimeString('pt-BR');
+            logEntry.innerHTML = `<span class="log-time">[${time}]</span>${message}`;
+            
+            logsContainer.appendChild(logEntry);
+            logsContainer.scrollTop = logsContainer.scrollHeight;
+        }
+
+        // Limpar logs
+        function clearLogs() {
+            document.getElementById('logsContainer').innerHTML = '';
+            addLog('📝 Logs limpos', 'info');
+        }
+
+        // Atualizar informações do sistema
+        function refreshSystemInfo() {
+            addLog('🔄 Atualizando informações do sistema...', 'info');
+            
+            // Tentar obter dados do localStorage
+            const guestId = localStorage.getItem('guest_id') || 'Não encontrado';
+            const userId = localStorage.getItem('user_id') || 'Não encontrado';
+            const deviceId = localStorage.getItem('device_id') || 'Não encontrado';
+            const points = localStorage.getItem('pix_points') || localStorage.getItem('user_points') || '0';
+            
+            document.getElementById('guestId').textContent = guestId;
+            document.getElementById('userId').textContent = userId;
+            document.getElementById('deviceId').textContent = deviceId || 'Não encontrado';
+            document.getElementById('localPoints').textContent = points;
+            
+            // Solicitar pontos atuais do Unity
+            sendToUnity('getCurrentPoints');
+            
+            addLog('✅ Informações atualizadas', 'success');
+        }
+
+        // Teste: Enviar pontos
+        function testSendPoints() {
+            const points = parseInt(document.getElementById('pointsAmount').value) || 2;
+            const network = document.getElementById('adNetwork').value;
+            
+            addLog(`🧪 Iniciando teste de envio de ${points} pontos (rede: ${network})...`, 'info');
+            
+            stats.totalSent++;
+            updateStats();
+            
+            // Simular envio via rewarded ad (que envia 2 pontos automaticamente)
+            if (network === 'test') {
+                // Para teste manual, vamos simular o envio direto
+                addLog('⚠️ Modo teste: Simulando envio direto ao servidor', 'warning');
+                simulatePointsSend(points, network);
+            } else {
+                // Para rewarded ad real, usar o sistema normal
+                addLog('🎬 Solicitando rewarded ad para enviar pontos...', 'info');
+                sendToUnity('showAd', {
+                    type: 'rewarded',
+                    network: network
+                });
+            }
+        }
+
+        // Simular envio de pontos (para teste)
+        function simulatePointsSend(points, network) {
+            addLog(`📤 Simulando envio de ${points} pontos ao servidor...`, 'info');
+            
+            // Aqui você pode fazer uma chamada direta ao servidor se necessário
+            // Por enquanto, apenas logamos
+            setTimeout(() => {
+                const success = Math.random() > 0.2; // 80% de chance de sucesso
+                
+                if (success) {
+                    const newTotal = (parseInt(document.getElementById('localPoints').textContent) || 0) + points;
+                    stats.successCount++;
+                    stats.lastTotal = newTotal;
+                    addLog(`✅ Pontos enviados com sucesso! Novo total: ${newTotal}`, 'success');
+                    document.getElementById('localPoints').textContent = newTotal;
+                } else {
+                    stats.errorCount++;
+                    addLog(`❌ Falha ao enviar pontos ao servidor`, 'error');
+                }
+                
+                updateStats();
+            }, 1000);
+        }
+
+        // Teste: Rewarded Ad completo
+        function testRewardedAd() {
+            const network = document.getElementById('adNetwork').value;
+            
+            addLog('🎬 Iniciando teste de rewarded ad completo...', 'info');
+            addLog('📋 Este teste irá: 1) Exibir rewarded ad 2) Enviar 2 pontos ao servidor', 'info');
+            
+            // Registrar listener para eventos
+            registerAdEventListener();
+            
+            // Solicitar rewarded ad
+            const sent = sendToUnity('showAd', {
+                type: 'rewarded',
+                network: network
+            });
+            
+            if (!sent) {
+                addLog('⚠️ Não foi possível enviar comando para Unity', 'warning');
+            }
+        }
+
+        // Registrar listener de eventos de anúncio
+        function registerAdEventListener() {
+            window.onAdEvent = (eventType, adType) => {
+                addLog(`📨 Evento de anúncio: ${eventType} - ${adType}`, 'info');
+                
+                if (eventType === 'adRewarded') {
+                    stats.successCount++;
+                    addLog('✅ Rewarded ad completado! Pontos devem ter sido enviados.', 'success');
+                    updateStats();
+                    refreshSystemInfo();
+                } else if (eventType === 'adFailed' || eventType === 'adCanceled') {
+                    stats.errorCount++;
+                    addLog(`❌ Rewarded ad falhou ou foi cancelado: ${eventType}`, 'error');
+                    updateStats();
+                }
+            };
+            
+            // Listener para pontos enviados
+            window.onPointsSentSuccessfully = (points, newTotal) => {
+                stats.successCount++;
+                stats.lastTotal = newTotal;
+                addLog(`✅ Pontos enviados com sucesso! Pontos: ${points}, Novo total: ${newTotal}`, 'success');
+                document.getElementById('localPoints').textContent = newTotal;
+                updateStats();
+            };
+        }
+
+        // Teste: Múltiplos envios
+        function testMultipleSends() {
+            const count = 5;
+            addLog(`🔄 Iniciando teste de ${count} envios sequenciais...`, 'info');
+            
+            let sent = 0;
+            const interval = setInterval(() => {
+                sent++;
+                addLog(`📤 Envio ${sent}/${count}...`, 'info');
+                testSendPoints();
+                
+                if (sent >= count) {
+                    clearInterval(interval);
+                    addLog(`✅ Teste de múltiplos envios concluído`, 'success');
+                }
+            }, 2000);
+        }
+
+        // Enviar pontos diretamente via HTTP
+        async function sendPointsViaWeb() {
+            const points = parseInt(document.getElementById('webPointsAmount').value) || 2;
+            const type = document.getElementById('webPointsType').value;
+            const adNetwork = document.getElementById('webAdNetwork').value;
+            const serverUrl = document.getElementById('serverUrl').value;
+            
+            // Obter identificação
+            let guestId = document.getElementById('webGuestId').value;
+            let userId = document.getElementById('webUserId').value;
+            let deviceId = document.getElementById('webDeviceId').value;
+            
+            // Se não preenchido, tentar obter do sistema
+            if (!guestId) {
+                guestId = localStorage.getItem('guest_id') || null;
+            }
+            if (!userId) {
+                userId = localStorage.getItem('user_id') || null;
+            }
+            if (!deviceId) {
+                deviceId = localStorage.getItem('device_id') || null;
+            }
+            
+            addLog(`🌐 Iniciando envio via web de ${points} pontos...`, 'info');
+            addLog(`📋 Configuração:`, 'info');
+            addLog(`   - Tipo: ${type}`, 'info');
+            addLog(`   - Rede: ${adNetwork}`, 'info');
+            addLog(`   - Guest ID: ${guestId || 'não fornecido'}`, 'info');
+            addLog(`   - User ID: ${userId || 'não fornecido'}`, 'info');
+            addLog(`   - Device ID: ${deviceId ? deviceId.substring(0, 20) + '...' : 'não fornecido'}`, 'info');
+            
+            // Validar que temos pelo menos um identificador
+            if (!guestId && !userId && !deviceId) {
+                addLog('❌ Erro: É necessário fornecer Guest ID, User ID ou Device ID', 'error');
+                return;
+            }
+            
+            // Validar URL
+            if (!serverUrl || !serverUrl.startsWith('http')) {
+                addLog('❌ Erro: URL do servidor inválida', 'error');
+                return;
+            }
+            
+            // Preparar payload
+            const payload = {
+                points: points,
+                type: type,
+                source: `${adNetwork}_web`
+            };
+            
+            if (guestId) payload.guest_id = parseInt(guestId);
+            if (userId) payload.user_id = parseInt(userId);
+            if (deviceId) payload.device_id = deviceId;
+            if (adNetwork && adNetwork !== 'web_test') payload.ad_network = adNetwork;
+            
+            addLog(`📤 Enviando requisição HTTP POST...`, 'info');
+            addLog(`📋 Payload: ${JSON.stringify(payload, null, 2)}`, 'info');
+            addLog(`🔗 URL: ${serverUrl}`, 'info');
+            
+            stats.totalSent++;
+            updateStats();
+            
+            try {
+                const response = await fetch(serverUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload)
+                });
+                
+                addLog(`📡 Resposta recebida (Status: ${response.status})`, 'info');
+                
+                const responseText = await response.text();
+                addLog(`📥 Resposta bruta: ${responseText}`, 'info');
+                
+                let responseData;
+                try {
+                    responseData = JSON.parse(responseText);
+                } catch (e) {
+                    addLog(`❌ Erro ao parsear JSON: ${e.message}`, 'error');
+                    addLog(`📄 Resposta completa: ${responseText}`, 'error');
+                    stats.errorCount++;
+                    updateStats();
+                    return;
+                }
+                
+                // Tratar erro 404 especificamente
+                if (response.status === 404) {
+                    stats.errorCount++;
+                    addLog(`❌ ERRO 404: Endpoint não encontrado!`, 'error');
+                    addLog(`   O arquivo PHP não foi encontrado no servidor.`, 'error');
+                    addLog(`   Verifique:`, 'error');
+                    addLog(`   1. Se o arquivo unified_submit_score.php existe no servidor`, 'error');
+                    addLog(`   2. Se o caminho está correto (app_pix01/php/)`, 'error');
+                    addLog(`   3. Se o arquivo foi enviado para o servidor`, 'error');
+                    addLog(`   4. Tente usar uma URL alternativa usando o menu acima`, 'error');
+                    addLog(`   📄 Resposta do servidor (HTML): ${responseText.substring(0, 200)}...`, 'error');
+                    updateStats();
+                    return;
+                }
+                
+                if (response.ok && responseData.status === 'success') {
+                    const newTotal = responseData.new_total || responseData.total_points || 0;
+                    stats.successCount++;
+                    stats.lastTotal = newTotal;
+                    
+                    addLog(`✅ Pontos enviados com sucesso!`, 'success');
+                    addLog(`   - Pontos adicionados: ${responseData.points_added || points}`, 'success');
+                    addLog(`   - Total anterior: ${newTotal - (responseData.points_added || points)}`, 'success');
+                    addLog(`   - Novo total: ${newTotal}`, 'success');
+                    
+                    if (responseData.guest_id) {
+                        addLog(`   - Guest ID: ${responseData.guest_id}`, 'success');
+                        // Atualizar localStorage
+                        localStorage.setItem('guest_id', responseData.guest_id);
+                        document.getElementById('guestId').textContent = responseData.guest_id;
+                    }
+                    
+                    if (responseData.user_id) {
+                        addLog(`   - User ID: ${responseData.user_id}`, 'success');
+                        localStorage.setItem('user_id', responseData.user_id);
+                        document.getElementById('userId').textContent = responseData.user_id;
+                    }
+                    
+                    // Atualizar pontos locais
+                    document.getElementById('localPoints').textContent = newTotal;
+                    localStorage.setItem('pix_points', newTotal);
+                    localStorage.setItem('user_points', newTotal);
+                    
+                    updateStats();
+                } else {
+                    stats.errorCount++;
+                    addLog(`❌ Erro na resposta do servidor:`, 'error');
+                    addLog(`   - Status: ${responseData.status || 'unknown'}`, 'error');
+                    addLog(`   - Mensagem: ${responseData.message || 'Sem mensagem'}`, 'error');
+                    updateStats();
+                }
+            } catch (error) {
+                stats.errorCount++;
+                addLog(`❌ Erro na requisição HTTP: ${error.message}`, 'error');
+                addLog(`   - Tipo: ${error.name}`, 'error');
+                
+                // Verificar se é erro de CORS
+                if (error.message.includes('CORS') || error.message.includes('fetch')) {
+                    addLog(`   ⚠️ Possível erro de CORS. Verifique se o servidor permite requisições do seu domínio.`, 'warning');
+                }
+                
+                // Verificar se é erro de rede
+                if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+                    addLog(`   ⚠️ Erro de rede. Verifique:`, 'warning');
+                    addLog(`      1. Conexão com internet`, 'warning');
+                    addLog(`      2. Se o servidor está online`, 'warning');
+                    addLog(`      3. Se a URL está correta`, 'warning');
+                }
+                
+                if (error.stack) {
+                    addLog(`   - Stack: ${error.stack.substring(0, 200)}...`, 'error');
+                }
+                updateStats();
+            }
+        }
+
+        // Selecionar URL predefinida
+        function selectUrlPreset() {
+            const select = document.getElementById('urlPresets');
+            const selectedUrl = select.value;
+            if (selectedUrl) {
+                document.getElementById('serverUrl').value = selectedUrl;
+                addLog(`📋 URL alterada para: ${selectedUrl}`, 'info');
+            }
+        }
+
+        // Preencher formulário automaticamente
+        function autoFillWebForm() {
+            const guestId = localStorage.getItem('guest_id');
+            const userId = localStorage.getItem('user_id');
+            const deviceId = localStorage.getItem('device_id');
+            
+            if (guestId) {
+                document.getElementById('webGuestId').value = guestId;
+                addLog(`📋 Guest ID preenchido: ${guestId}`, 'info');
+            }
+            
+            if (userId) {
+                document.getElementById('webUserId').value = userId;
+                addLog(`📋 User ID preenchido: ${userId}`, 'info');
+            }
+            
+            if (deviceId) {
+                document.getElementById('webDeviceId').value = deviceId;
+                addLog(`📋 Device ID preenchido: ${deviceId.substring(0, 20)}...`, 'info');
+            }
+            
+            if (!guestId && !userId && !deviceId) {
+                addLog('⚠️ Nenhum dado encontrado no sistema. Preencha manualmente.', 'warning');
+            } else {
+                addLog('✅ Formulário preenchido automaticamente!', 'success');
+            }
+        }
+
+        // Atualizar estatísticas
+        function updateStats() {
+            document.getElementById('totalSent').textContent = stats.totalSent;
+            document.getElementById('successCount').textContent = stats.successCount;
+            document.getElementById('errorCount').textContent = stats.errorCount;
+            document.getElementById('lastTotal').textContent = stats.lastTotal !== null ? stats.lastTotal : '-';
+        }
+
+        // Atualizar status do Unity
+        function updateUnityStatus() {
+            const statusBadge = document.getElementById('unityStatus');
+            const isUnity = isUnityEnvironment();
+            
+            if (isUnity) {
+                statusBadge.textContent = '✅ Unity Conectado';
+                statusBadge.className = 'status-badge status-online';
+            } else {
+                statusBadge.textContent = '⚠️ Unity Não Disponível';
+                statusBadge.className = 'status-badge status-offline';
+            }
+        }
+
+        // Callback para atualização de pontos do Unity
+        window.updatePoints = (points) => {
+            document.getElementById('localPoints').textContent = points;
+            addLog(`💰 Pontos atualizados pelo Unity: ${points}`, 'success');
+        };
+
+        // Inicialização
+        window.addEventListener('DOMContentLoaded', () => {
+            addLog('🚀 Página de teste carregada', 'success');
+            updateUnityStatus();
+            refreshSystemInfo();
+            registerAdEventListener();
+            
+            // Atualizar status a cada 5 segundos
+            setInterval(updateUnityStatus, 5000);
+        });
+    </script>
+</body>
+</html>
+

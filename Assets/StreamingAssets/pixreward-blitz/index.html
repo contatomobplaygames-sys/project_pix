@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>PixReward Blitz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8733260701845866"
+         crossorigin="anonymous"></script>
+    <!-- NOTE: For production, replace CDN Tailwind with a static build (npx tailwindcss -o styles.css) -->
+    <style>
+      /* Reset para ocupar toda a tela */
+      html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        position: relative;
+      }
+
+      #root {
+        width: 100%;
+        height: 100%;
+      }
+      
+      /* Garantir que não haja espaços no topo */
+      html {
+        scroll-behavior: auto;
+      }
+      
+      body {
+        position: relative;
+      }
+
+      /* Smooth scrolling and disable pull-to-refresh on mobile for app-like feel */
+      body {
+        overscroll-behavior-y: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      /* Utility class to hide scrollbar but keep functionality */
+      .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+      }
+      .scrollbar-hide {
+          -ms-overflow-style: none;  /* IE and Edge */
+          scrollbar-width: none;  /* Firefox */
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100 text-gray-900 antialiased select-none m-0 p-0">
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
