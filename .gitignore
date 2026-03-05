@@ -1,5 +1,6 @@
 Logs/
 Library/
+Obj/
 Packages/
 Build/
 .utmp/
@@ -7,3 +8,5 @@ Assets.zip
 *.so
 *.bundle
 Assets/Firebase/Plugins/
+*.apk
+*.aab
